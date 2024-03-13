@@ -1,4 +1,4 @@
-import 'package:application/screens/LSScrenn.dart';
+import 'package:application/screens/ls_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

@@ -1,8 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserM {
   String id, email, np, image;
   bool admin, enable;
-  static late UserM current;
+
   UserM({
     required this.id,
     required this.email,
@@ -21,7 +20,7 @@ class UserM {
       enable: json['enable'],
     );
   }
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'email': email,

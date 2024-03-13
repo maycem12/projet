@@ -1,11 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison
-
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:application/model/user.dart';
+import 'package:application/data/globlas.dart';
 import 'package:application/screens/menu.dart';
 import 'package:application/services/auth.dart';
-import 'package:application/services/db.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,25 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late UserM userm;
   AuthServices auth = AuthServices();
-  Future<void> getUser() async {
-    User? user = await auth.user;
-    final userResult = await DBServices().getUser(user!.uid);
-    setState(() {
-      userm = userResult;
-      UserM.current = userResult;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    userm = UserM(id: '', email: '', np: '');
-    getUser();
     return Scaffold(
-      drawer: Menu(),
+      drawer: const Menu(),
       appBar: AppBar(
-          title: Text("Home Page"),
+          title: const Text("Home Page"),
           backgroundColor: Colors.blue,
           actions: [
             Row(
@@ -43,15 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 CircleAvatar(
                   radius: 15,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      userm.image != null ? NetworkImage(userm.image) : null,
-                  child: userm.image != null
-                      ? Container()
+                  backgroundImage: currentUser!.image.isNotEmpty
+                      ? NetworkImage(currentUser!.image)
+                      : null,
+                  child: currentUser!.image.isEmpty
+                      ? null
                       : const Icon(Icons.person, color: Colors.black),
                 ),
-                Text(userm.np),
+                Text(currentUser!.np),
                 IconButton(
-                    icon: Icon(Icons.person),
+                    icon: const Icon(Icons.person),
                     onPressed: () async {
                       await auth.signOut();
                       setState(() {});
@@ -67,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               animatedTexts: [
                 WavyAnimatedText(
                   'Bienvenue!',
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     color: Color.fromARGB(255, 4, 8, 115),
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -75,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
 
             //utilisateurs
             MaterialButton(
@@ -107,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             MaterialButton(
               onPressed: () {},
               child: Padding(
@@ -133,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             MaterialButton(
               onPressed: () {},
               child: Padding(
@@ -159,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
 
             MaterialButton(
               onPressed: () {},

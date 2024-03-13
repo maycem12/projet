@@ -6,23 +6,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
+  DBServices dbService = DBServices();
   Future<User?> get user async {
     final user = FirebaseAuth.instance.currentUser;
     return user;
   }
 
-  Future<bool> signup(String email, String pass, String np) async {
-    try {
-      final result = await auth.createUserWithEmailAndPassword(
-          email: email, password: pass);
-      if (result.user != null) {
-        await DBServices()
-            .saveUser(UserM(id: result.user!.uid, email: email, np: np));
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
+  Future<void> signup(String email, String pass, String np) async {
+    final result =
+        await auth.createUserWithEmailAndPassword(email: email, password: pass);
+    if (result.user != null) {
+      await dbService
+          .saveUser(UserM(id: result.user!.uid, email: email, np: np));
     }
   }
 
@@ -34,16 +29,22 @@ class AuthServices {
     }
   }
 
-  Future<bool> signin(String email, String pass) async {
-    try {
-      final result =
-          await auth.signInWithEmailAndPassword(email: email, password: pass);
-      if (result.user != null) return true;
-      return false;
-    } catch (e) {
-      return false;
-    }
+  Future<UserM?> signin(String email, String password) async {
+    final authResult =
+        await auth.signInWithEmailAndPassword(email: email, password: password);
+    return await dbService.getCurrentUser(authResult.user!.uid);
   }
+
+  // Future<bool> signin(String email, String pass) async {
+  //   try {
+  //     final result =
+  //         await auth.signInWithEmailAndPassword(email: email, password: pass);
+  //     if (result.user != null) return true;
+  //     return false;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 
   Future<bool> reset(String email) async {
     try {

@@ -1,6 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
-
-import 'package:application/screens/LSScrenn.dart';
+import 'package:application/screens/ls_screen.dart';
 import 'package:application/screens/login.dart';
 import 'package:application/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +12,7 @@ class Statut extends StatefulWidget {
 }
 
 class _StatutState extends State<Statut> {
-  late User user;
+  late User? user;
   AuthServices auth = AuthServices();
 
   Future<void> getUser() async {

@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'package:application/screens/onboardingcontroller.dart';
+import 'package:application/controllers/onboardingcontroller.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -11,7 +9,6 @@ class OnBoardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(OnBoardingController());
-    final Controller = OnBoardingController.instance;
 
     return Scaffold(
         body: Stack(
@@ -52,10 +49,10 @@ class OnBoardingScreen extends StatelessWidget {
             bottom: 50,
             left: 20,
             child: SmoothPageIndicator(
-                controller: Controller.pageController,
+                controller: controller.pageController,
                 onDotClicked: controller.dotNavigationClick,
                 count: 3,
-                effect: ExpandingDotsEffect(
+                effect: const ExpandingDotsEffect(
                     activeDotColor: Colors.blueGrey, dotHeight: 6))),
         //boutton
         Positioned(
@@ -63,7 +60,7 @@ class OnBoardingScreen extends StatelessWidget {
             bottom: 40,
             child: ElevatedButton(
               onPressed: () => OnBoardingController.instance.nextPage(),
-              style: ElevatedButton.styleFrom(shape: CircleBorder()),
+              style: ElevatedButton.styleFrom(shape: const CircleBorder()),
               child: const Icon(Icons.last_page),
             ))
       ],
@@ -93,7 +90,7 @@ class OnBoardingPage extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(

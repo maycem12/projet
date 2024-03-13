@@ -1,6 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace, unnecessary_null_comparison, prefer_const_constructors
-
-import 'package:application/model/user.dart';
+import 'package:application/data/globlas.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatefulWidget {
@@ -13,22 +11,22 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
-    final user = UserM.current;
     return Container(
       color: Colors.white,
       width: 250,
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountEmail: Text(user.email),
-            accountName: Text(user.np),
+            accountEmail: Text(currentUser!.email),
+            accountName: Text(currentUser!.np),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.black,
-              backgroundImage:
-                  user.image != null ? NetworkImage(user.image) : null,
-              child: user.image != null
+              backgroundImage: currentUser!.image.isNotEmpty
+                  ? NetworkImage(currentUser!.image)
+                  : null,
+              child: currentUser!.image.isEmpty
                   ? Container()
-                  : Icon(
+                  : const Icon(
                       Icons.person,
                       color: Colors.amber,
                     ),

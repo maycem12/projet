@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:application/screens/login.dart';
 import 'package:application/screens/signup.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +16,11 @@ class LSScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //image
-                Image(
+                const Image(
                     width: 600,
                     height: 600,
                     image: AssetImage('images/abc.png')),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //boutton 1
                 MaterialButton(
@@ -30,7 +28,7 @@ class LSScreen extends StatelessWidget {
                     // Naviguer vers une nouvelle page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LogIn()),
+                      MaterialPageRoute(builder: (context) => const LogIn()),
                     );
                   },
                   child: Padding(
@@ -56,14 +54,14 @@ class LSScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 //boutton 2
                 MaterialButton(
                   onPressed: () {
                     // Naviguer vers une nouvelle page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignUp()),
+                      MaterialPageRoute(builder: (context) => const SignUp()),
                     );
                   },
                   child: Padding(

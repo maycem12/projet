@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 loading(context) => showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => Center(
-        child: Container(
+      builder: (ctx) => const Center(
+        child: SizedBox(
           width: 30,
           height: 30,
           child: CircularProgressIndicator(

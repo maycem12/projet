@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, curly_braces_in_flow_control_structures
-
 import 'package:application/services/auth.dart';
 import 'package:application/utiles/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUp extends StatefulWidget {
@@ -21,7 +20,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Créer un compte "),
+        title: const Text("Créer un compte "),
       ),
       body: SafeArea(
         child: Center(
@@ -32,16 +31,16 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //image
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 100.0,
                     backgroundImage: AssetImage('images/log.gif'),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   //title
                   Text('Créer un compte',
                       style: GoogleFonts.robotoCondensed(
                           fontSize: 40, fontWeight: FontWeight.bold)),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   //nom etttttttttttt prenom
@@ -58,7 +57,7 @@ class _SignUpState extends State<SignUp> {
                           keyboardType: TextInputType.text,
                           onChanged: (e) => np = e,
                           validator: (e) => e!.isEmpty ? "champ vide" : null,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Nom et Prénom',
                             prefixIcon: Icon(Icons.account_circle,
                                 color: Color.fromARGB(255, 4, 8, 115)),
@@ -67,7 +66,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   //emaiiiiiiiiiiiiiiiiiiiiiiiiiil
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -82,7 +81,7 @@ class _SignUpState extends State<SignUp> {
                           keyboardType: TextInputType.emailAddress,
                           onChanged: (e) => email = e,
                           validator: (e) => e!.isEmpty ? "champ vide" : null,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'E-mail',
                             prefixIcon: Icon(Icons.mail,
                                 color: Color.fromARGB(255, 4, 8, 115)),
@@ -91,7 +90,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Container(
@@ -112,9 +111,9 @@ class _SignUpState extends State<SignUp> {
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
                               icon: hidden
-                                  ? Icon(Icons.visibility_off,
+                                  ? const Icon(Icons.visibility_off,
                                       color: Color.fromARGB(255, 4, 8, 115))
-                                  : Icon(Icons.visibility,
+                                  : const Icon(Icons.visibility,
                                       color: Color.fromARGB(255, 4, 8, 115)),
                               onPressed: () {
                                 setState(() {
@@ -123,7 +122,7 @@ class _SignUpState extends State<SignUp> {
                               },
                             ),
                             hintText: 'Mot de passe',
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.lock,
                               color: Color.fromARGB(255, 4, 8, 115),
                             ),
@@ -133,7 +132,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                   //confirm password
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Container(
@@ -154,9 +153,9 @@ class _SignUpState extends State<SignUp> {
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
                               icon: hidden
-                                  ? Icon(Icons.visibility_off,
+                                  ? const Icon(Icons.visibility_off,
                                       color: Color.fromARGB(255, 4, 8, 115))
-                                  : Icon(Icons.visibility,
+                                  : const Icon(Icons.visibility,
                                       color: Color.fromARGB(255, 4, 8, 115)),
                               onPressed: () {
                                 setState(() {
@@ -165,7 +164,7 @@ class _SignUpState extends State<SignUp> {
                               },
                             ),
                             hintText: 'Confirmer votre mot de passe ',
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.lock,
                               color: Color.fromARGB(255, 4, 8, 115),
                             ),
@@ -174,20 +173,33 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   //boutttttonnnnnn
                   MaterialButton(
                     onPressed: () async {
                       if (keys.currentState!.validate()) {
                         loading(context);
-                        bool register = await auth.signup(email, pass, np);
-                        // ignore: unnecessary_null_comparison
-                        if (register != null) {
+                        await auth.signup(email, pass, np).then((value) {
                           Navigator.of(context).pop();
-                          if (register) {
-                            Navigator.of(context).pop();
-                          }
-                        }
+                          Navigator.of(context).pop();
+                          Get.dialog(const AlertDialog(
+                            title: Text(
+                              "succéé",
+                            ),
+                            content:
+                                Text("votre compte a été crée avec succée"),
+                          ));
+                        }).onError((error, stackTrace) {
+                          Navigator.of(context).pop();
+                          Get.dialog(AlertDialog(
+                            title: const Text(
+                              "Error",
+                            ),
+                            content: Text(
+                              error.toString(),
+                            ),
+                          ));
+                        });
                       }
                     },
                     child: Padding(
