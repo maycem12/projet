@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:application/screens/onboardingcontroller.dart';
+import 'package:application/controllers/onboardingcontroller.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

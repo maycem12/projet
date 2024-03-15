@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:application/services/auth.dart';
 import 'package:application/utiles/loading.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,7 @@ class _ResetState extends State<Reset> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Connectez-vous "),
+        title: const Text("Connectez-vous "),
       ),
       body: SafeArea(
         child: Center(
@@ -31,12 +29,12 @@ class _ResetState extends State<Reset> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   //title
                   Text('Connectez-vous',
                       style: GoogleFonts.robotoCondensed(
                           fontSize: 40, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   //emaill
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -50,7 +48,7 @@ class _ResetState extends State<Reset> {
                         child: TextFormField(
                           onChanged: (e) => email = e,
                           validator: (e) => e!.isEmpty ? "champ vide" : null,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'E-mail',
                             prefixIcon: Icon(Icons.mail,
                                 color: Color.fromARGB(255, 4, 8, 115)),
@@ -59,7 +57,7 @@ class _ResetState extends State<Reset> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   //sign in
                   MaterialButton(
                     onPressed: () async {
@@ -69,7 +67,10 @@ class _ResetState extends State<Reset> {
                         if (send) {
                           msg =
                               "Accéder à votre email pour reinitialiser votre mot de passe ";
-                          Navigator.of(context).pop();
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+
                           setState(() {});
                         }
                       }

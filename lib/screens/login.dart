@@ -1,10 +1,9 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, use_build_context_synchronously, avoid_print, curly_braces_in_flow_control_structures
-
 import 'package:application/screens/homescreen.dart';
 import 'package:application/screens/reset_page.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/utiles/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LogIn extends StatefulWidget {
@@ -23,7 +22,7 @@ class _LogInState extends State<LogIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Connectez-vous "),
+        title: const Text("Connectez-vous "),
       ),
       body: SafeArea(
         child: Center(
@@ -34,16 +33,16 @@ class _LogInState extends State<LogIn> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //image
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 100.0,
                     backgroundImage: AssetImage('images/log.gif'),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   //title
                   Text('Connectez-vous',
                       style: GoogleFonts.robotoCondensed(
                           fontSize: 40, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   //emaill
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -57,7 +56,7 @@ class _LogInState extends State<LogIn> {
                         child: TextFormField(
                           onChanged: (e) => email = e,
                           validator: (e) => e!.isEmpty ? "champ vide" : null,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'E-mail',
                             prefixIcon: Icon(Icons.mail,
                                 color: Color.fromARGB(255, 4, 8, 115)),
@@ -66,7 +65,7 @@ class _LogInState extends State<LogIn> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   //password
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -88,9 +87,9 @@ class _LogInState extends State<LogIn> {
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
                               icon: hidden
-                                  ? Icon(Icons.visibility_off,
+                                  ? const Icon(Icons.visibility_off,
                                       color: Color.fromARGB(255, 4, 8, 115))
-                                  : Icon(Icons.visibility,
+                                  : const Icon(Icons.visibility,
                                       color: Color.fromARGB(255, 4, 8, 115)),
                               onPressed: () {
                                 setState(() {
@@ -99,7 +98,7 @@ class _LogInState extends State<LogIn> {
                               },
                             ),
                             hintText: 'Mot de passe',
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.lock,
                               color: Color.fromARGB(255, 4, 8, 115),
                             ),
@@ -108,38 +107,41 @@ class _LogInState extends State<LogIn> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   //mot de passe oublié
                   MaterialButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) => Reset()),
+                        MaterialPageRoute(builder: (ctx) => const Reset()),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 220.0),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 220.0),
                       child: Text(
                         "Mot de passe oublié?",
                         style: TextStyle(color: Color.fromARGB(255, 4, 8, 115)),
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   //sign in
                   MaterialButton(
                     onPressed: () async {
                       if (keys.currentState!.validate()) {
                         loading(context);
-                        bool login = await auth.signin(email, pass);
-                        if (login != null) {
+                        await auth.signin(email, pass).then((value) {
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
+                                builder: (context) => const HomeScreen()),
                           );
-                          if (!login)
-                            print("E-mail ou mot de passe incorrecte");
-                        }
+                        }).onError((error, stackTrace) {
+                          Navigator.pop(context);
+                          Get.dialog(AlertDialog(
+                            title: Text(error.toString()),
+                          ));
+                        });
                       }
                     },
                     child: Padding(

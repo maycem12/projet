@@ -1,13 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:application/model/user.dart';
 import 'package:application/screens/menu.dart';
 import 'package:application/services/auth.dart';
-import 'package:application/services/db.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,26 +13,16 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  late UserM userm;
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AuthServices auth = AuthServices();
-  Future<void> getUser() async {
-    User? user = await auth.user;
-    final userResult = await DBServices().getUser(user!.uid);
-    setState(() {
-      userm = userResult;
-      UserM.current = userResult;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    userm = UserM(id: '', email: '', np: '');
-    getUser();
+    final currentUser = Provider.of<UserM>(context);
     return Scaffold(
-      drawer: Menu(),
+      drawer: const Menu(),
       appBar: AppBar(
-          title: Text("Home Page"),
+          title: const Text("Home Page"),
           backgroundColor: Colors.blue,
           actions: [
             Row(
@@ -43,15 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 CircleAvatar(
                   radius: 15,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      userm.image != null ? NetworkImage(userm.image) : null,
-                  child: userm.image != null
-                      ? Container()
+                  backgroundImage: currentUser.image.isNotEmpty
+                      ? NetworkImage(currentUser.image)
+                      : null,
+                  child: currentUser.image.isNotEmpty
+                      ? null
                       : const Icon(Icons.person, color: Colors.black),
                 ),
-                Text(userm.np),
+                Text(currentUser.np),
                 IconButton(
-                    icon: Icon(Icons.person),
+                    icon: const Icon(Icons.person),
                     onPressed: () async {
                       await auth.signOut();
                       setState(() {});
@@ -67,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               animatedTexts: [
                 WavyAnimatedText(
                   'Bienvenue!',
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     color: Color.fromARGB(255, 4, 8, 115),
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -75,39 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
 
             //utilisateurs
-            MaterialButton(
-              onPressed: () {},
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.amber[900],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Gestion des utilisateurs',
-                            style: GoogleFonts.robotoCondensed(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 15),
+            buildUserManagementButton(currentUser),
+            const SizedBox(height: 15),
             MaterialButton(
               onPressed: () {},
               child: Padding(
@@ -133,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             MaterialButton(
               onPressed: () {},
               child: Padding(
@@ -159,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
 
             MaterialButton(
               onPressed: () {},
@@ -190,5 +150,42 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget buildUserManagementButton(UserM currentUser) {
+    if (currentUser.admin) {
+      return MaterialButton(
+        onPressed: () {
+          // Ajoutez ici la logique pour la gestion des utilisateurs
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.amber[900],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                child: Text(
+                  'Gestion des utilisateurs',
+                  style: GoogleFonts.robotoCondensed(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      // ignore: prefer_const_constructors
+      return SizedBox(
+          height:
+              0); // Retourne un SizedBox pour ne pas afficher le bouton si l'utilisateur n'est pas administrateur
+    }
   }
 }
