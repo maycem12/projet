@@ -2,7 +2,10 @@
 
 import 'package:application/firebase_options.dart';
 import 'package:application/model/user.dart';
+import 'package:application/screens/homescreen.dart';
+import 'package:application/screens/login.dart';
 import 'package:application/screens/onboarding.dart';
+import 'package:application/screens/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +16,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserM(id: '', email: '', np: ''),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,12 +31,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider<UserM>(
-        create: (context) =>
-            UserM(id: '', email: '', np: ''), // Providing an instance of UserM
-        child: OnBoardingScreen(),
-      ),
-    );
+        debugShowCheckedModeBanner: false,
+        routes: <String, WidgetBuilder>{
+          '/': (context) => OnBoardingScreen(),
+          '/HomeScreen': (context) => HomeScreen(),
+          '/LogIn': (context) => LogIn(),
+          '/SignUp': (context) => SignUp(),
+        });
   }
 }

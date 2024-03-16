@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class UserM with ChangeNotifier {
   String id, email, np, image;
   bool admin, enable;
-
+  static late UserM currentUser;
   UserM({
     required this.id,
     required this.email,

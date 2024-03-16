@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:application/admin/admin.dart';
 import 'package:application/model/user.dart';
 import 'package:application/screens/menu.dart';
 import 'package:application/services/auth.dart';
@@ -13,12 +14,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   AuthServices auth = AuthServices();
-
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<UserM>(context);
+    final userm = Provider.of<UserM>(context);
+    UserM.currentUser = userm;
     return Scaffold(
       drawer: const Menu(),
       appBar: AppBar(
@@ -30,14 +31,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 CircleAvatar(
                   radius: 15,
                   backgroundColor: Colors.white,
-                  backgroundImage: currentUser.image.isNotEmpty
-                      ? NetworkImage(currentUser.image)
-                      : null,
-                  child: currentUser.image.isNotEmpty
+                  backgroundImage:
+                      userm.image.isNotEmpty ? NetworkImage(userm.image) : null,
+                  child: userm.image.isEmpty
                       ? null
                       : const Icon(Icons.person, color: Colors.black),
                 ),
-                Text(currentUser.np),
+                Text(userm.np),
                 IconButton(
                     icon: const Icon(Icons.person),
                     onPressed: () async {
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             const SizedBox(height: 50),
 
             //utilisateurs
-            buildUserManagementButton(currentUser),
+            buildUserManagementButton(userm),
             const SizedBox(height: 15),
             MaterialButton(
               onPressed: () {},
@@ -152,11 +152,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildUserManagementButton(UserM currentUser) {
-    if (currentUser.admin) {
+  Widget buildUserManagementButton(UserM userm) {
+    if (userm.admin) {
       return MaterialButton(
         onPressed: () {
-          // Ajoutez ici la logique pour la gestion des utilisateurs
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => const AdminPage()));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
