@@ -1,3 +1,5 @@
+import 'package:application/admin/admin.dart';
+import 'package:application/data/globals.dart';
 import 'package:application/screens/homescreen.dart';
 import 'package:application/screens/reset_page.dart';
 import 'package:application/services/auth.dart';
@@ -131,11 +133,18 @@ class _LogInState extends State<LogIn> {
                         loading(context);
                         await auth.signin(email, pass).then((value) {
                           Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomeScreen()),
-                          );
+                          if (currentUser!.admin == true) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AdminPage()));
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()),
+                            );
+                          }
                         }).onError((error, stackTrace) {
                           Navigator.pop(context);
                           Get.dialog(AlertDialog(

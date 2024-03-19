@@ -45,6 +45,11 @@ class DBServices {
     return null;
   }
 
+  Future updateUser(UserM user) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc(user.id);
+    await docUser.update(user.toJson());
+  }
+
   // Stream<UserM>? get getCurrentUser {
   //   final user = FirebaseAuth.instance.currentUser;
   //   return user != null

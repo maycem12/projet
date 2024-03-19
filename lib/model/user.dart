@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-class UserM with ChangeNotifier {
+class UserM {
   String id, email, np, image;
   bool admin, enable;
   static late UserM currentUser;

@@ -1,11 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:application/admin/admin.dart';
-import 'package:application/model/user.dart';
+import 'package:application/data/globals.dart';
 import 'package:application/screens/menu.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,10 +14,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   AuthServices auth = AuthServices();
+
   @override
   Widget build(BuildContext context) {
-    final userm = Provider.of<UserM>(context);
-    UserM.currentUser = userm;
     return Scaffold(
       drawer: const Menu(),
       appBar: AppBar(
@@ -31,13 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 CircleAvatar(
                   radius: 15,
                   backgroundColor: Colors.white,
-                  backgroundImage:
-                      userm.image.isNotEmpty ? NetworkImage(userm.image) : null,
-                  child: userm.image.isEmpty
+                  backgroundImage: currentUser!.image.isNotEmpty
+                      ? NetworkImage(currentUser!.image)
+                      : null,
+                  child: currentUser!.image.isEmpty
                       ? null
                       : const Icon(Icons.person, color: Colors.black),
                 ),
-                Text(userm.np),
+                Text(currentUser!.np),
                 IconButton(
                     icon: const Icon(Icons.person),
                     onPressed: () async {
@@ -65,9 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 50),
 
-            //utilisateurs
-            buildUserManagementButton(userm),
-            const SizedBox(height: 15),
+            //materielssssssssssss
             MaterialButton(
               onPressed: () {},
               child: Padding(
@@ -150,43 +146,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  Widget buildUserManagementButton(UserM userm) {
-    if (userm.admin) {
-      return MaterialButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (ctx) => const AdminPage()));
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.amber[900],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: Text(
-                  'Gestion des utilisateurs',
-                  style: GoogleFonts.robotoCondensed(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      // ignore: prefer_const_constructors
-      return SizedBox(
-          height:
-              0); // Retourne un SizedBox pour ne pas afficher le bouton si l'utilisateur n'est pas administrateur
-    }
   }
 }
