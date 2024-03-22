@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:application/admin/list_users.dart';
 import 'package:application/data/globals.dart';
 import 'package:application/screens/menu.dart';
+import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,7 +14,12 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  get auth => null;
+  AuthServices auth = AuthServices();
+  @override
+  void initState() {
+    super.initState();
+    auth = AuthServices(); // Initialisation de l'objet auth ici
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +39,36 @@ class _AdminPageState extends State<AdminPage> {
                       : null,
                   child: currentUser!.image.isEmpty
                       ? null
-                      : const Icon(Icons.person, color: Colors.black),
+                      : const Icon(Icons.person, color: Colors.blue),
                 ),
                 Text(currentUser!.np),
                 IconButton(
                     icon: const Icon(Icons.person),
                     onPressed: () async {
-                      await auth.signOut();
-                      setState(() {});
+                      showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                                title: const Text("Déconnection"),
+                                content:
+                                    const Text("Voulez-vous vous déconnecter?"),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Non"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      await auth.signOut();
+                                      setState(() {});
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Oui"),
+                                  ),
+                                ]);
+                          });
                     }),
               ],
             )

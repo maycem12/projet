@@ -85,23 +85,26 @@ class OnBoardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Image(width: 600, height: 600, image: AssetImage(image)),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineMedium,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            subTitle,
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-        ],
+      child: SingleChildScrollView(
+        // Add SingleChildScrollView here
+        child: Column(
+          children: [
+            Image(width: 600, height: 600, image: AssetImage(image)),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.headlineMedium,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              subTitle,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
