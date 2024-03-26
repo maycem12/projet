@@ -3,7 +3,6 @@
 import 'package:application/api/firebase_api.dart';
 import 'package:application/firebase_options.dart';
 import 'package:application/screens/onboarding.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,11 +12,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseApi().initNotifications();
+  await FirebaseApi().initNotification();
   runApp(MyApp());
 }
-
-FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -28,7 +25,6 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: OnBoardingScreen(),

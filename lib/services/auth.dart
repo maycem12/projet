@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:application/model/user.dart';
 import 'package:application/services/db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class AuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -18,14 +20,34 @@ class AuthServices {
     if (result.user != null) {
       await dbService
           .saveUser(UserM(id: result.user!.uid, email: email, np: np));
+      await sendEmailToAdmin(email);
     }
   }
 
-  Future signOut() async {
+  Future<void> sendEmailToAdmin(String userEmail) async {
+    final smtpServer = gmail('your@gmail.com', 'your_password');
+
+    final message = Message()
+      ..from = Address('your@gmail.com', 'Your Name')
+      ..recipients.add(
+          'maycem.benlagha@gmail.com') // Remplacez par l'e-mail de l'administrateur
+      ..subject = 'Nouvel utilisateur inscrit'
+      ..text =
+          'Un nouvel utilisateur s\'est inscrit avec l\'adresse e-mail : $userEmail';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> signOut() async {
     try {
       await auth.signOut();
     } catch (e) {
-      return null;
+      print("Erreur lors de la déconnexion : $e");
     }
   }
 

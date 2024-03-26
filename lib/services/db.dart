@@ -10,6 +10,8 @@ import 'package:path/path.dart' as Path; // Import the path package
 class DBServices {
   final CollectionReference usercol =
       FirebaseFirestore.instance.collection("users");
+  final CollectionReference carouselcol =
+      FirebaseFirestore.instance.collection("carsouel");
   Future saveUser(UserM user) async {
     try {
       await usercol.doc(user.id).set(user.toJson());
@@ -58,6 +60,16 @@ class DBServices {
       await usercol.doc(user.id).update(user.toJson());
       return true;
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> deleteUser(UserM user) async {
+    try {
+      await usercol.doc(user.id).delete();
+      return true;
+    } catch (e) {
+      print("Error deleting user: $e");
       return false;
     }
   }

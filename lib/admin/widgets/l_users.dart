@@ -33,7 +33,7 @@ class _LusersState extends State<Lusers> {
           return Card(
             child: ListTile(
               leading: CircleAvatar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color.fromARGB(255, 3, 63, 111),
                   child: Text(
                     allusers[index].np.substring(0, 2).toUpperCase(),
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -56,7 +56,7 @@ class _LusersState extends State<Lusers> {
                             content: SingleChildScrollView(
                               // ignore: avoid_unnecessary_containers
                               child: Container(
-                                height: 250,
+                                height: 100,
                                 child: Column(
                                   children: [
                                     TextField(

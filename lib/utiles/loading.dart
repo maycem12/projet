@@ -6,6 +6,7 @@ loading(context) => showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => Center(
+        // ignore: sized_box_for_whitespace
         child: Container(
           width: 30,
           height: 30,

@@ -178,26 +178,31 @@ class _SignUpState extends State<SignUp> {
                   MaterialButton(
                     onPressed: () async {
                       if (keys.currentState!.validate()) {
+                        if (pass != cpass) {
+                          // Si les mots de passe ne correspondent pas, affichez une erreur
+                          Get.dialog(const AlertDialog(
+                            title: Text("Erreur"),
+                            content:
+                                Text("Les mots de passe ne correspondent pas."),
+                          ));
+                          return; // Arrêtez l'exécution de la méthode onPressed
+                        }
+
+                        // Les mots de passe correspondent, vous pouvez procéder à l'inscription
                         loading(context);
                         await auth.signup(email, pass, np).then((value) {
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                           Get.dialog(const AlertDialog(
-                            title: Text(
-                              "succée",
-                            ),
+                            title: Text("Succès"),
                             content:
-                                Text("votre compte a été crée avec succée"),
+                                Text("Votre compte a été créé avec succès."),
                           ));
                         }).onError((error, stackTrace) {
                           Navigator.of(context).pop();
                           Get.dialog(AlertDialog(
-                            title: const Text(
-                              "Error",
-                            ),
-                            content: Text(
-                              error.toString(),
-                            ),
+                            title: Text("Erreur"),
+                            content: Text(error.toString()),
                           ));
                         });
                       }

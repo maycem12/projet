@@ -1,4 +1,4 @@
-import 'package:application/admin/widgets/l_users.dart';
+import 'package:application/admin/widgets/modifier_users.dart';
 import 'package:application/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class _ListUsersState extends State<ListUsers> {
                   .map((doc) =>
                       UserM.fromJson(doc.data() as Map<String, dynamic>))
                   .toList();
-              return Lusers(users: allusers);
+              return ModifierUsers(users: allusers);
             } else {
               return const Center(child: CircularProgressIndicator());
             }

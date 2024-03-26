@@ -20,10 +20,8 @@ class LSScreen extends StatelessWidget {
                 //image
                 Image(
                     width: 600,
-                    height: 600,
+                    height: 500,
                     image: AssetImage('images/abc.png')),
-                SizedBox(height: 20),
-
                 //boutton 1
                 MaterialButton(
                   onPressed: () {
