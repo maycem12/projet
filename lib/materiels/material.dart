@@ -1,4 +1,5 @@
 import 'package:application/materiels/Ajouter.dart';
+import 'package:application/materiels/ListMateriels.dart';
 import 'package:flutter/material.dart';
 
 class MaterielsPage extends StatefulWidget {
@@ -56,9 +57,7 @@ class _MaterielsPageState extends State<MaterielsPage> {
             body: const TabBarView(
               children: [
                 Ajouter(),
-                Center(
-                  child: Text('page2'),
-                ),
+                ListMateriels(),
               ],
             )));
   }

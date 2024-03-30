@@ -5,6 +5,7 @@ import 'package:application/services/db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -15,46 +16,87 @@ class AuthServices {
   }
 
   Future<void> signup(String email, String pass, String np) async {
-    final result =
-        await auth.createUserWithEmailAndPassword(email: email, password: pass);
-    if (result.user != null) {
-      await dbService
-          .saveUser(UserM(id: result.user!.uid, email: email, np: np));
-      await sendEmailToAdmin(email);
+    try {
+      final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      if (result.user != null) {
+        // Saving user information to the database
+        await dbService
+            .saveUser(UserM(id: result.user!.uid, email: email, np: np));
+
+        // Sending email to admin
+        await sendEmailToAdmin(
+            'NouvelUtilisateur', 'nouvelutilisateur@example.com');
+
+        print('utilisateur sest inscrit avec succès.');
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'email-already-in-use') {
+          print('Le compte existe déjà pour cet e-mail. ');
+        } else {
+          print('Error: ${e.message}');
+        }
+      }
     }
   }
 
-  Future<void> sendEmailToAdmin(String userEmail) async {
-    final smtpServer = gmail('your@gmail.com', 'your_password');
+  Future<void> sendEmailToAdmin(String username, String email) async {
+    final smtpServer = SmtpServer('smtp.gmail.com',
+        username: 'your-email@example.com', password: 'your-email-password');
 
     final message = Message()
-      ..from = Address('your@gmail.com', 'Your Name')
-      ..recipients.add(
-          'maycem.benlagha@gmail.com') // Remplacez par l'e-mail de l'administrateur
+      ..from = Address('your-email@example.com')
+      ..recipients.add('maycem.benlagha@gmail.com')
       ..subject = 'Nouvel utilisateur inscrit'
-      ..text =
-          'Un nouvel utilisateur s\'est inscrit avec l\'adresse e-mail : $userEmail';
+      ..text = 'Un nouvel utilisateur s\'est inscrit :\n\n'
+          'Nom d\'utilisateur : $username\n'
+          'Adresse e-mail : $email';
 
     try {
       final sendReport = await send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
+      print('Message envoyé : ${sendReport.toString()}');
     } catch (e) {
-      print('Error: $e');
+      print('Erreur lors de l\'envoi de l\'e-mail : $e');
     }
   }
 
   Future<void> signOut() async {
     try {
       await auth.signOut();
+      await setFirstTimeUser(true);
     } catch (e) {
       print("Erreur lors de la déconnexion : $e");
     }
   }
 
-  Future<UserM?> signin(String email, String password) async {
-    final authResult =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
-    return await dbService.getCurrentUser(authResult.user!.uid);
+  Future<bool> isFirstTimeUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+    return isFirstTime;
+  }
+
+  Future<void> setFirstTimeUser(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstTime', value);
+  }
+
+  Future<UserM?> signIn(String email, String password) async {
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      await setFirstTimeUser(
+          false); // Set isFirstTimeUser to false after successful sign-in
+
+      // Get the current user details from the database
+      return await dbService.getCurrentUser(userCredential.user!.uid);
+    } catch (e) {
+      print('Failed to sign in: $e');
+      return null;
+    }
   }
 
   // Future<bool> signin(String email, String pass) async {

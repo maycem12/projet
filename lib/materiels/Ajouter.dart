@@ -23,8 +23,8 @@ class _AjouterState extends State<Ajouter> {
               const SizedBox(height: 20),
               TextField(
                 controller: controllerNom,
-                style: TextStyle(fontSize: 22),
-                decoration: InputDecoration(
+                style: const TextStyle(fontSize: 22),
+                decoration: const InputDecoration(
                   labelText: 'Nom Matériel',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(40)),
@@ -34,8 +34,8 @@ class _AjouterState extends State<Ajouter> {
               const SizedBox(height: 20),
               TextField(
                 controller: controllerCodeEtiquette,
-                style: TextStyle(fontSize: 22),
-                decoration: InputDecoration(
+                style: const TextStyle(fontSize: 22),
+                decoration: const InputDecoration(
                   labelText: 'Code Etiquette',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(40)),

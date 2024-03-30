@@ -2,7 +2,7 @@
 
 import 'package:application/api/firebase_api.dart';
 import 'package:application/firebase_options.dart';
-import 'package:application/screens/onboarding.dart';
+import 'package:application/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: OnBoardingScreen(),
+      home: SplashScreen(),
     );
   }
 }

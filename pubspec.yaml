@@ -54,6 +54,7 @@ dependencies:
   cached_network_image: ^3.3.1
   mailer: ^6.1.0
   flutter_mjpeg: ^2.0.4
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

@@ -131,7 +131,7 @@ class _LogInState extends State<LogIn> {
                     onPressed: () async {
                       if (keys.currentState!.validate()) {
                         loading(context);
-                        await auth.signin(email, pass).then((value) {
+                        await auth.signIn(email, pass).then((value) {
                           Navigator.pop(context);
                           if (currentUser!.admin == true) {
                             Navigator.pushReplacement(
