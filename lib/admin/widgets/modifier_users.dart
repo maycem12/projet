@@ -56,7 +56,7 @@ class _ModifierUsersState extends State<ModifierUsers> {
                             content: SingleChildScrollView(
                               // ignore: avoid_unnecessary_containers
                               child: Container(
-                                height: 300,
+                                height: 190,
                                 child: Column(
                                   children: [
                                     TextField(
@@ -70,7 +70,7 @@ class _ModifierUsersState extends State<ModifierUsers> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(40)))),
                                     ),
-                                    const SizedBox(height: 20),
+                                    const SizedBox(height: 5),
                                     TextField(
                                       controller: _ctrupdatemail,
                                       style: const TextStyle(
@@ -82,24 +82,20 @@ class _ModifierUsersState extends State<ModifierUsers> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(40)))),
                                     ),
-                                    const SizedBox(height: 5),
-                                    MaterialButton(
-                                      onPressed: () {
-                                        final user = UserM(
-                                            id: allusers[index].id,
-                                            np: _ctrupdatnp.text,
-                                            email: _ctrupdatemail.text);
-                                        updateUser(user);
-                                      },
-                                      // ignore: sized_box_for_whitespace
-                                      child: Container(
-                                          child: const Text('Modifier')),
-                                    ),
                                   ],
                                 ),
                               ),
                             ),
                             actions: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    final user = UserM(
+                                        id: allusers[index].id,
+                                        np: _ctrupdatnp.text,
+                                        email: _ctrupdatemail.text);
+                                    updateUser(user);
+                                  },
+                                  child: const Text('Modifier')),
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(context, 'Annuler');

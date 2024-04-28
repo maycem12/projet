@@ -1,7 +1,7 @@
-import 'package:application/admin/admin.dart';
 import 'package:application/data/globals.dart';
 import 'package:application/screens/homescreen.dart';
 import 'package:application/screens/reset_page.dart';
+import 'package:application/screens/signup.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/utiles/loading.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _LogInState extends State<LogIn> {
                     radius: 100.0,
                     backgroundImage: AssetImage('images/log.gif'),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   //title
                   Text('Connectez-vous',
                       style: GoogleFonts.robotoCondensed(
@@ -118,14 +118,16 @@ class _LogInState extends State<LogIn> {
                       );
                     },
                     child: const Padding(
-                      padding: EdgeInsets.only(left: 220.0),
+                      padding: EdgeInsets.only(left: 200.0),
                       child: Text(
                         "Mot de passe oublié?",
-                        style: TextStyle(color: Color.fromARGB(255, 4, 8, 115)),
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 4, 8, 115),
+                            fontSize: 10),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
                   //sign in
                   MaterialButton(
                     onPressed: () async {
@@ -133,22 +135,22 @@ class _LogInState extends State<LogIn> {
                         loading(context);
                         await auth.signIn(email, pass).then((value) {
                           Navigator.pop(context);
-                          if (currentUser!.admin == true) {
+                          if (currentUser!.isdelete == false) {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const AdminPage()));
+                                    builder: (context) => const HomeScreen()));
                           } else {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
-                            );
+                            Navigator.pop(context);
+                            Get.dialog(const AlertDialog(
+                              title: Text(
+                                  "vous ne pouver pas connecter a votre compte"),
+                            ));
                           }
                         }).onError((error, stackTrace) {
                           Navigator.pop(context);
-                          Get.dialog(AlertDialog(
-                            title: Text(error.toString()),
+                          Get.dialog(const AlertDialog(
+                            title: Text("Votre compte a été supprimer"),
                           ));
                         });
                       }
@@ -174,6 +176,40 @@ class _LogInState extends State<LogIn> {
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      // Naviguer vers une nouvelle page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignUp()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 5, 67, 118),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Center(
+                            child: Text(
+                              'Créer un compte',
+                              style: GoogleFonts.robotoCondensed(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ),

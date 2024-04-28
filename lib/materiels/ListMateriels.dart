@@ -11,31 +11,61 @@ class ListMateriels extends StatefulWidget {
 }
 
 class _ListMaterielsState extends State<ListMateriels> {
+  List<Materiel> listMateriels = [];
+  List<Materiel> filteredMateriels = [];
+
   @override
   Widget build(BuildContext context) {
-    List<Materiel> ListMateriels = [];
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Matériels')
-            .orderBy('Nom')
-            .snapshots(),
-        builder: (context, snp) {
-          if (snp.hasError) {
-            return const Center(
-              child: Text('error'),
-            );
-          }
-          if (snp.hasData) {
-            ListMateriels = snp.data!.docs
-                .map((doc) =>
-                    Materiel.fromJson(doc.data() as Map<String, dynamic>))
-                .toList();
-            return ListM(Materiels: ListMateriels);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  filteredMateriels = listMateriels
+                      .where((materiel) =>
+                          materiel.Nom.toLowerCase()
+                              .contains(value.toLowerCase()) ||
+                          materiel.Code_Etiquette.toLowerCase()
+                              .contains(value.toLowerCase()))
+                      .toList();
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Rechercher par nom ou code étiquette',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Matériels')
+                  .orderBy('Nom')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                listMateriels = snapshot.data!.docs
+                    .map((doc) =>
+                        Materiel.fromJson(doc.data() as Map<String, dynamic>))
+                    .toList();
+                if (filteredMateriels.isEmpty) {
+                  filteredMateriels = listMateriels;
+                }
+                return ListM(Materiels: filteredMateriels);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

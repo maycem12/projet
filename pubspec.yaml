@@ -55,6 +55,9 @@ dependencies:
   mailer: ^6.1.0
   flutter_mjpeg: ^2.0.4
   shared_preferences: ^2.2.2
+  firebase_database: ^10.5.0
+  video_player: ^2.8.6
+  flutter_hooks: ^0.20.5
 
 dev_dependencies:
   flutter_test:

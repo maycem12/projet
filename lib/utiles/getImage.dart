@@ -12,7 +12,7 @@ class GetImage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       color: Colors.black,
-      height: 100,
+      height: 130,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

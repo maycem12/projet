@@ -66,6 +66,8 @@ class DBServices {
 
   Future<bool> deleteUser(UserM user) async {
     try {
+      // Mettez à jour le champ "deleted" à true ici
+      await usercol.doc(user.id).update({'isdelete': true});
       await usercol.doc(user.id).delete();
       return true;
     } catch (e) {

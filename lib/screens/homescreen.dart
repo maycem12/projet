@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:application/data/globals.dart';
 import 'package:application/materiels/material.dart';
+import 'package:application/screens/NotificationScreen.dart';
 import 'package:application/screens/login.dart';
 import 'package:application/screens/menu.dart';
 import 'package:application/services/auth.dart';
+import 'package:application/surveillance/surveillance.dart';
 import 'package:application/utiles/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -19,13 +20,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AuthServices auth = AuthServices();
   final List<String> imagePaths = [
-    "images/image1.jpg",
-    "images/image2.jfif",
-    "images/image3.jpg"
+    "images/ele.jpg",
+    "images/mayrou.jpg",
+    "images/11.jpg",
+    "images/1.jpg",
+    "images/ll.jpg",
+    "images/3.jfif",
+    "images/222.jpg",
+    "images/4.jfif",
+    "images/jj.jpg",
   ];
   late List<Widget> _pages;
   int _activePage = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(
+    initialPage: 0,
+    viewportFraction: 1,
+  );
   Timer? _timer;
 
   //@override
@@ -133,26 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedTextKit(
-              animatedTexts: [
-                WavyAnimatedText(
-                  'Bienvenue!',
-                  textStyle: const TextStyle(
-                    color: Color.fromARGB(255, 4, 8, 115),
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
             Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 3,
+                  height: MediaQuery.of(context).size.height * 0.742,
                   child: PageView.builder(
                       controller: _pageController,
                       itemCount: imagePaths.length,
@@ -231,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 BottomNavigationBarItem(
-                  label: 'Gestion des matériels',
+                  label: 'Matériels',
                   icon: GestureDetector(
                     onTap: () {
                       if (currentUser != null) {
@@ -264,17 +259,65 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 BottomNavigationBarItem(
                   label: 'Surveillance',
-                  icon: Container(
-                    margin: const EdgeInsets.all(5),
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(10),
+                  icon: GestureDetector(
+                    onTap: () {
+                      if (currentUser != null) {
+                        if (currentUser!.enable) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Surveillancc(),
+                            ),
+                          );
+                        } else {
+                          messages("Votre compte a été bloqué");
+                        }
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt_rounded,
+                        size: 30,
+                        color: Colors.grey,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.camera_alt_rounded,
-                      size: 30,
-                      color: Colors.grey,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  label: 'Historiques',
+                  icon: GestureDetector(
+                    onTap: () {
+                      if (currentUser != null) {
+                        if (currentUser!.enable) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationScreen(),
+                            ),
+                          );
+                        } else {
+                          messages("Votre compte a été bloqué");
+                        }
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.history,
+                        size: 30,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
